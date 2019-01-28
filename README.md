@@ -9,7 +9,7 @@ Create an instance of the mRouter class
 
     $router = new mRouter();
     
-After adding the different routing functions, it is time to let mRoute do its magic! At the following code:
+After [adding the routing functions](#add-a-route), it is time to let mRoute do its magic! At the following code:
 
     $router->open();
     
@@ -30,4 +30,11 @@ You are also able to use one or multiple variables in your request. To use a var
     $router->get( 'user/{id}', function( $response ) {
       // get the value of the 'id' variable
       $id = $response->getParameter( 'id' );
+    });
+
+## Status route
+Not only can you create routes based on HTTP methods and URLs, you can also create routes based on status codes. This can be usefull to create a 'Page not found' route when no HTTP Method and URL is found. To create a 'Page not found' route, use the following code:
+
+    $router->status( '404', function() {
+      // 404 Not Found;
     });
