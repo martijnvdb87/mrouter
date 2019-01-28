@@ -30,6 +30,7 @@ You are also able to use one or multiple variables in your request. To use a var
     $router->get( 'user/{id}', function( $response ) {
       // get the value of the 'id' variable
       $id = $response->getParameter( 'id' );
+      include( 'view/user.php' );
     });
 
 ## Status route
@@ -37,6 +38,7 @@ Not only can you create routes based on HTTP methods and URLs, you can also crea
 
     $router->status( '404', function() {
       // 404 Not Found;
+      include( 'view/404.php' );
     });
 
 ## Full example
