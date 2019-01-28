@@ -1,5 +1,7 @@
 # mRouter
 
+A simple routing class build with PHP.
+
 ## Quick install
 Include the mRouter class into your PHP file
 
