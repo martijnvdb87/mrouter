@@ -5,7 +5,7 @@ A simple routing class build with PHP.
 ## Quick install
 Include the mRouter class into your PHP file
 
-    require_once( 'class/mrouter.class.php' );
+    require_once( 'class/mRouter.class.php' );
 
 Create an instance of the mRouter class
 
