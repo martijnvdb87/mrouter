@@ -172,7 +172,7 @@ class mRouterResponse {
     }
 
     public function getParameter( $id ) {
-        if( !isset( $this->paramScan ) ) {
+        if( !$this->paramScan ) {
             $this->paramScan = true;
 
             $pattern    = $this->current[ 'pattern' ];
