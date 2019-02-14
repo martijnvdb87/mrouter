@@ -1,5 +1,5 @@
 <?php
-require_once( 'class/mrouter.class.php' );
+require_once( 'class/mRouter.class.php' );
 
 $router = new mRouter();
 
