@@ -72,7 +72,7 @@ class mRouter {
             $url = '/' . $url;
         }
 
-        if( $url[ ( sizeof( $url ) - 1 ) ] != '/' ) {
+        if( $url[ ( strlen( $url ) - 1 ) ] != '/' ) {
             $url = $url . '/';
         }
 
@@ -99,11 +99,13 @@ class mRouter {
 
         $this->url = $url;
 
-        for( $i = 0; $i < sizeof( $this->routes[ $method ] ); $i++ ) {
-            if( fnmatch( $this->routes[ $method ][ $i ][ 'pattern' ], $url, FNM_PATHNAME ) ) {
-                $this->status = 200;
-                $this->current = $this->routes[ $method ][ $i ];
-                break;
+        if( isset( $this->routes[ $method ] ) ) {
+            for( $i = 0; $i < sizeof( $this->routes[ $method ] ); $i++ ) {
+                if( fnmatch( $this->routes[ $method ][ $i ][ 'pattern' ], $url, FNM_PATHNAME ) ) {
+                    $this->status = 200;
+                    $this->current = $this->routes[ $method ][ $i ];
+                    break;
+                }
             }
         }
 
@@ -112,9 +114,9 @@ class mRouter {
         http_response_code( $this->status );
 
         if(
-            $this->routes[ 'status' ] &&
-            $this->routes[ 'status' ][ $status ] &&
-            $this->routes[ 'status' ][ $status ][ 'callback' ] &&
+            isset( $this->routes[ 'status' ] ) &&
+            isset( $this->routes[ 'status' ][ $status ] ) &&
+            isset( $this->routes[ 'status' ][ $status ][ 'callback' ] ) &&
             is_callable( $this->routes[ 'status' ][ $status ][ 'callback' ] )
         ) {
             $this->routes[ 'status' ][ $status ][ 'callback' ]();
@@ -131,7 +133,7 @@ class mRouter {
     }
 
     private function addRoute( $method, $url, $callback ) {
-        if( !$this->routes[ $method ] ) {
+        if( !isset( $this->routes[ $method ] ) ) {
             $this->routes[ $method ] = array();
         }
 
@@ -147,12 +149,12 @@ class mRouter {
     }
 
     private function addStatus( $code, $callback ) {
-        if( !$this->routes[ 'status' ] ) {
+        if( !isset( $this->routes[ 'status' ] ) ) {
             $this->routes[ 'status' ] = array();
         }
 
         $this->routes[ 'status' ][ $code ] = array(
-            'code'      => $url,
+            'code'      => $code,
             'callback'  => $callback
         );
     }
@@ -170,8 +172,8 @@ class mRouterResponse {
     }
 
     public function getParameter( $id ) {
-        if( !$paramScan ) {
-            $paramScan = true;
+        if( !isset( $this->paramScan ) ) {
+            $this->paramScan = true;
 
             $pattern    = $this->current[ 'pattern' ];
             $url        = $this->current[ 'url' ];
