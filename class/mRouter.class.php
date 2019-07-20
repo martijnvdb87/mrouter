@@ -68,11 +68,11 @@ class mRouter {
             $url = $urlParts[ 0 ];
         }
 
-        if( $url[ 0 ] != '/' ) {
+        if( substr( $url, 0, 1 ) != '/' ) {
             $url = '/' . $url;
         }
 
-        if( $url[ ( strlen( $url ) - 1 ) ] != '/' ) {
+        if( substr( $url, ( strlen( $url ) - 1 ), 1 ) != '/' ) {
             $url = $url . '/';
         }
 
@@ -99,13 +99,11 @@ class mRouter {
 
         $this->url = $url;
 
-        if( isset( $this->routes[ $method ] ) ) {
-            for( $i = 0; $i < sizeof( $this->routes[ $method ] ); $i++ ) {
-                if( fnmatch( $this->routes[ $method ][ $i ][ 'pattern' ], $url, FNM_PATHNAME ) ) {
-                    $this->status = 200;
-                    $this->current = $this->routes[ $method ][ $i ];
-                    break;
-                }
+        for( $i = 0; $i < sizeof( $this->routes[ $method ] ); $i++ ) {
+            if( fnmatch( $this->routes[ $method ][ $i ][ 'pattern' ], $url, FNM_PATHNAME ) ) {
+                $this->status = 200;
+                $this->current = $this->routes[ $method ][ $i ];
+                break;
             }
         }
 
@@ -114,9 +112,9 @@ class mRouter {
         http_response_code( $this->status );
 
         if(
-            isset( $this->routes[ 'status' ] ) &&
-            isset( $this->routes[ 'status' ][ $status ] ) &&
-            isset( $this->routes[ 'status' ][ $status ][ 'callback' ] ) &&
+            $this->routes[ 'status' ] &&
+            $this->routes[ 'status' ][ $status ] &&
+            $this->routes[ 'status' ][ $status ][ 'callback' ] &&
             is_callable( $this->routes[ 'status' ][ $status ][ 'callback' ] )
         ) {
             $this->routes[ 'status' ][ $status ][ 'callback' ]();
@@ -172,8 +170,8 @@ class mRouterResponse {
     }
 
     public function getParameter( $id ) {
-        if( !$this->paramScan ) {
-            $this->paramScan = true;
+        if( !$paramScan ) {
+            $paramScan = true;
 
             $pattern    = $this->current[ 'pattern' ];
             $url        = $this->current[ 'url' ];
